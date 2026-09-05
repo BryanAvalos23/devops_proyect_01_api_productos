@@ -13,16 +13,12 @@ import { errorHandler, notFoundHandler } from './middlewares/errorHandler';
 export function createApp(): Express {
   const app = express();
 
-  // Seguridad HTTP básica (cabeceras: X-Frame-Options, HSTS, etc.)
   app.use(helmet());
 
-  // CORS restringido al origen configurado (no '*' abierto por defecto en prod)
   app.use(cors({ origin: env.corsOrigin, credentials: true }));
 
-  // Límite de tamaño de body para mitigar payloads abusivos
   app.use(express.json({ limit: '100kb' }));
 
-  // Rate limiting global para mitigar abuso / fuerza bruta básica
   app.use(
     rateLimit({
       windowMs: env.rateLimitWindowMs,
